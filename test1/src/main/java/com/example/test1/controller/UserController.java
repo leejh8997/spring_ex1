@@ -29,6 +29,10 @@ public class UserController {
 	public String list(Model model) throws Exception{
 		return "/member-list";
 	}
+	@RequestMapping("/test.do")
+	public String test(Model model) throws Exception{
+		return "/test1";
+	}
 	
 	
 	@RequestMapping(value = "/login.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -47,6 +51,26 @@ public class UserController {
 
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = userService.memberList(map);
+		
+		return new Gson().toJson(resultMap); //받는 타입을 json으로 정의해서 json 형태로 변환
+	}
+	
+	@RequestMapping(value = "/member/remove.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String memberRemove(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = userService.memberRemove(map);
+		
+		return new Gson().toJson(resultMap); //받는 타입을 json으로 정의해서 json 형태로 변환
+	}
+	
+	@RequestMapping(value = "/test.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String testRemove(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = userService.testRemove(map);
 		
 		return new Gson().toJson(resultMap); //받는 타입을 json으로 정의해서 json 형태로 변환
 	}

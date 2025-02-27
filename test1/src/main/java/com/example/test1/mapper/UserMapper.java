@@ -15,6 +15,12 @@ public interface UserMapper {
 
 
 	List<Member> getUserList(HashMap<String, Object> map);
+
+
+	int memberDelete(HashMap<String, Object> map);
+
+
+	int testDelete(HashMap<String, Object> map);
 	
 	
 }

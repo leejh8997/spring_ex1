@@ -7,7 +7,7 @@ public class Member {
 	private String userId;
 	private String password;
 	private String userName;
-	private String addr;
+	private String address;
 	private String phone;
 	private String email;
 	private String birth;
@@ -36,11 +36,11 @@ public class Member {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public String getAddr() {
-		return addr;
+	public String getAddress() {
+		return address;
 	}
-	public void setAddr(String addr) {
-		this.addr = addr;
+	public void setAddress(String addr) {
+		this.address = addr;
 	}
 	public String getPhone() {
 		return phone;
