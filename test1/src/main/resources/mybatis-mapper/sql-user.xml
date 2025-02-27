@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.test1.mapper.UserMapper"> <!-- 자바의 implements 기능 -->
+	<select id="userMapperLogin" parameterType="hashmap" resultType="com.example.test1.model.User">
+		SELECT *
+		FROM TBL_USER
+		WHERE USERID = #{userId} AND PASSWORD = #{pwd}
+	</select>
+</mapper>
+
+
+
+
