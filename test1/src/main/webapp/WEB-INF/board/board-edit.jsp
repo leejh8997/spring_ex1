@@ -39,7 +39,7 @@
 				fnGetBoard() {
 					let self = this;
 					let nparmap = {
-						boardNo : self.boardNo
+						boardNo : self.boardNo,
 					};
 					$.ajax({
 						url: "/board/view.dox",

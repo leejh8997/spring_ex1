@@ -2,16 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.test1.mapper.UserMapper"> <!-- 자바의 implements 기능 -->
-	<select id="getUserList" parameterType="hashmap" resultType="com.example.test1.model.Member">
+<mapper namespace="com.example.test1.mapper.MemberMapper"> <!-- 자바의 implements 기능 -->
+	<select id="getMember" parameterType="hashmap" resultType="com.example.test1.model.Member">
 		SELECT *
 		FROM MEMBER
+		WHERE USERID = #{userId} AND PASSWORD = #{pwd}
 	</select>
-	
-	<delete id="memberDelete" parameterType="hashmap">
-		DELETE FROM MEMBER
-		WHERE USERID = #{userId}
-	</delete>
 </mapper>
 
 

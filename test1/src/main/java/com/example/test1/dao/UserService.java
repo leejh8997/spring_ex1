@@ -16,38 +16,38 @@ public class UserService{
 	UserMapper userMapper;
 	
 	
-	public HashMap<String, Object> userLogin(HashMap<String, Object> map) {
-		// TODO Auto-generated method stub
-		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-			User user = userMapper.userMapperLogin(map);
-			String result = user!=null? "success" : "fail";
-			resultMap.put("result", result);
-			resultMap.put("info", user);
-		return resultMap;
-	}
-	
-	public HashMap<String, Object> memberList(HashMap<String, Object> map) {
-		// TODO Auto-generated method stub
-		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-			List<Member> list = userMapper.getUserList(map);
-			resultMap.put("list", list);
-		return resultMap;
-	}
-
-	public HashMap<String, Object> memberRemove(HashMap<String, Object> map) {
-		// TODO Auto-generated method stub
-		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		int result = userMapper.memberDelete(map);
-		resultMap.put("result", result);
-		return resultMap;
-	}
-
-	public HashMap<String, Object> testRemove(HashMap<String, Object> map) {
-		// TODO Auto-generated method stub
-		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		int result = userMapper.testDelete(map);
-		resultMap.put("result", result);
-		return resultMap;
-	}
+//	public HashMap<String, Object> userLogin(HashMap<String, Object> map) {
+//		// TODO Auto-generated method stub
+//		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+//			User user = userMapper.userMapperLogin(map);
+//			String result = user!=null? "success" : "fail";
+//			resultMap.put("result", result);
+//			resultMap.put("info", user);
+//		return resultMap;
+//	}
+//	
+//	public HashMap<String, Object> memberList(HashMap<String, Object> map) {
+//		// TODO Auto-generated method stub
+//		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+//			List<Member> list = userMapper.getUserList(map);
+//			resultMap.put("list", list);
+//		return resultMap;
+//	}
+//
+//	public HashMap<String, Object> memberRemove(HashMap<String, Object> map) {
+//		// TODO Auto-generated method stub
+//		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+//		int result = userMapper.memberDelete(map);
+//		resultMap.put("result", result);
+//		return resultMap;
+//	}
+//
+//	public HashMap<String, Object> testRemove(HashMap<String, Object> map) {
+//		// TODO Auto-generated method stub
+//		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+//		int result = userMapper.testDelete(map);
+//		resultMap.put("result", result);
+//		return resultMap;
+//	}
 	
 }

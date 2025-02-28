@@ -26,7 +26,8 @@ public class BoardController {
 	// remove, delete
 	
 	@RequestMapping("/board/list.do")
-	public String boardList(Model model) throws Exception{
+	public String boardList(HttpServletRequest request,Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		request.setAttribute("map", map);
 		return "/board/board-list";
 	}
 	@RequestMapping("/board/add.do")
@@ -76,6 +77,8 @@ public class BoardController {
 		
 		return new Gson().toJson(resultMap); //받는 타입을 json으로 정의해서 json 형태로 변환
 	}
+	
+	//게시글 수정
 	@RequestMapping(value = "/board/edit.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String boardEdit(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
@@ -86,5 +89,15 @@ public class BoardController {
 		return new Gson().toJson(resultMap); //받는 타입을 json으로 정의해서 json 형태로 변환
 	}
 	
+	//게시글 삭제
+		@RequestMapping(value = "/board/remove.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+		@ResponseBody
+		public String boardRemove(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+
+			HashMap<String, Object> resultMap = new HashMap<String, Object>();
+			resultMap = boardService.boardRemove(map);
+			
+			return new Gson().toJson(resultMap); //받는 타입을 json으로 정의해서 json 형태로 변환
+		}
 }
 

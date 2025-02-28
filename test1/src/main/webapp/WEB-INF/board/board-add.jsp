@@ -34,6 +34,7 @@
 				return {
 					title: "",
 					contents: "",
+					userId:"${sessionId}"
 				};
 			},
 			methods: {
@@ -42,6 +43,7 @@
 					let nparmap = {
 						title: self.title,
 						contents: self.contents,
+						userId: self.userId
 					};
 					$.ajax({
 						url: "/board/add.dox",

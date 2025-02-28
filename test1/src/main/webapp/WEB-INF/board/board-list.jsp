@@ -24,6 +24,15 @@
 
 	<body>
 		<div id="app">
+			<div>
+				<select v-model="searchOption">
+					<option value="all">:: 전체 ::</option>
+					<option value="title">제목</option>
+					<option value="name">작성자</option>
+				</select>
+				<input v-model="keyword" @keyup.enter="fnBoardList" placeholder="검색어">
+				<button @click="fnBoardList">검색</button>
+			</div>
 			<table>
 				<tr>
 					<th>번호</th>
@@ -37,7 +46,7 @@
 					<td>
 						<a href="javascript:;" @click="fnView(item.boardNo)">{{item.title}}</a>
 					</td>
-					<td>{{item.userId}}</td>
+					<td>{{item.userName}}</td>
 					<td>{{item.cnt}}</td>
 					<td>{{item.cdateTime}}</td>
 				</tr>
@@ -51,14 +60,19 @@
 		const app = Vue.createApp({
 			data() {
 				return {
-					list : []
+					list : [],
+					keyword : "",
+					searchOption : "all",
+
+					
 				};
 			},
 			methods: {
 				fnBoardList() {
 					let self = this;
 					let nparmap = {
-
+						keyword: self.keyword,
+						searchOption: self.searchOption
 					};
 					$.ajax({
 						url: "/board/list.dox",
@@ -66,6 +80,7 @@
 						type: "POST",
 						data: nparmap,
 						success: function (data) {
+							console.log(self.sessionId);
 							console.log(data);
 							self.list = data.list;
 						}
@@ -81,6 +96,7 @@
 			mounted() {
 				let self = this;
 				self.fnBoardList();
+				
 			}
 		});
 		app.mount('#app');

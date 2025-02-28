@@ -18,6 +18,10 @@ public interface BoardMapper {
 
 	Board updateBoard(HashMap<String, Object> map);
 
+	void updateCnt(HashMap<String, Object> map);
+
+	void deleteBoard(HashMap<String, Object> map);
+
 	
 	
 }

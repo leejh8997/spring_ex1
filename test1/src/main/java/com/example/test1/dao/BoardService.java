@@ -47,6 +47,10 @@ public class BoardService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		try {
+				if(map.containsKey("option")) {
+				boardMapper.updateCnt(map);
+			}
+			
 			Board info = boardMapper.selectBoard(map);
 			String result = "success";
 			resultMap.put("info", info);
@@ -73,12 +77,16 @@ public class BoardService {
 		return resultMap;
 	}
 
-	// public HashMap<String, Object> memberList(HashMap<String, Object> map) {
-	// // TODO Auto-generated method stub
-	// HashMap<String, Object> resultMap = new HashMap<String, Object>();
-	// List<Member> list = userMapper.getUserList(map);
-	// resultMap.put("list", list);
-	// return resultMap;
-	// }
+	public HashMap<String, Object> boardRemove(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			boardMapper.deleteBoard(map);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+
 
 }
