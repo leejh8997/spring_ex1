@@ -45,6 +45,12 @@ public class BoardController {
 		return "/board/board-edit";
 	}
 	
+	@RequestMapping("/board/user.do")
+	public String boardUser(HttpServletRequest request,Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		request.setAttribute("map", map);
+		return "/board/board-user";
+	}
+	
 	// 게시글 목록
 	@RequestMapping(value = "/board/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
@@ -90,14 +96,23 @@ public class BoardController {
 	}
 	
 	//게시글 삭제
-		@RequestMapping(value = "/board/remove.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-		@ResponseBody
-		public String boardRemove(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
-
-			HashMap<String, Object> resultMap = new HashMap<String, Object>();
-			resultMap = boardService.boardRemove(map);
-			
-			return new Gson().toJson(resultMap); //받는 타입을 json으로 정의해서 json 형태로 변환
-		}
+	@RequestMapping(value = "/board/remove.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String boardRemove(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = boardService.boardRemove(map);
+		
+		return new Gson().toJson(resultMap); //받는 타입을 json으로 정의해서 json 형태로 변환
+	}
+	
+	//유저 정보
+	@RequestMapping(value = "/board/user.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String boardUser(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = boardService.getUser(map);
+		
+		return new Gson().toJson(resultMap); //받는 타입을 json으로 정의해서 json 형태로 변환
+	}
 }
 

@@ -46,7 +46,14 @@
 					<td>
 						<a href="javascript:;" @click="fnView(item.boardNo)">{{item.title}}</a>
 					</td>
-					<td>{{item.userName}}</td>
+					<td v-if="sessionStatus=='A'">
+						<a href="javascript:;" @click="fnUser(item.userId)">
+							{{item.userName}}
+						</a>
+					</td>
+					<td v-else>
+						{{item.userName}}
+					</td>
 					<td>{{item.cnt}}</td>
 					<td>{{item.cdateTime}}</td>
 				</tr>
@@ -63,7 +70,7 @@
 					list : [],
 					keyword : "",
 					searchOption : "all",
-
+					sessionStatus: "${sessionStatus}"
 					
 				};
 			},
@@ -80,7 +87,7 @@
 						type: "POST",
 						data: nparmap,
 						success: function (data) {
-							console.log(self.sessionId);
+							console.log(self.sessionStatus);
 							console.log(data);
 							self.list = data.list;
 						}
@@ -91,6 +98,9 @@
 				},
 				fnView : function(boardNo){
 					pageChange("/board/view.do",{boardNo : boardNo});
+				},
+				fnUser : function(userId){
+					pageChange("/board/user.do",{userId : userId});
 				}
 			},
 			mounted() {

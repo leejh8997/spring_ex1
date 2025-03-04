@@ -1,6 +1,7 @@
 package com.example.test1.dao;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -31,6 +32,50 @@ public class MemberService {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			resultMap.put("result", "fail");
+		}
+		return resultMap;
+	}
+	
+	public HashMap<String, Object> memberList(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+			List<Member> list = memberMapper.getUserList(map);
+			resultMap.put("list", list);
+		return resultMap;
+	}
+
+	public HashMap<String, Object> memberAdd(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			memberMapper.memberJoin(map);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+	
+	public HashMap<String, Object> memberRemove(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+		int result = memberMapper.memberDelete(map);
+		resultMap.put("result", result);
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return resultMap;
+	}
+
+	public HashMap<String, Object> searchMember(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			Member member = memberMapper.selectMember(map);
+			int count = member != null ? 1 : 0;
+			resultMap.put("count",count);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
 		return resultMap;
 	}

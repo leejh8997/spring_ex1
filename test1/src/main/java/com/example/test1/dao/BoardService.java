@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.test1.model.Board;
+import com.example.test1.model.Member;
 import com.example.test1.mapper.BoardMapper;
 
 @Service
@@ -36,7 +37,6 @@ public class BoardService {
 	        int result = boardMapper.insertBoardList(map); // INSERT 결과 개수
 	        resultMap.put("result", result > 0 ? "success" : "fail");
 	    } catch (Exception e) {
-	        e.printStackTrace();
 	        resultMap.put("result", "fail");
 	    }
 		return resultMap;
@@ -86,6 +86,21 @@ public class BoardService {
 			System.out.println(e.getMessage());
 		}
 		return null;
+	}
+	
+	public HashMap<String, Object> getUser(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		try {			
+			Member info = boardMapper.selectUser(map);
+			String result = "success";
+			resultMap.put("info", info);
+			resultMap.put("result", result);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");
+		}
+		return resultMap;
 	}
 
 

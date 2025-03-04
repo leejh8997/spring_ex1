@@ -27,7 +27,7 @@
 //	
 //	@RequestMapping("/member/list.do")
 //	public String list(Model model) throws Exception{
-//		return "/member-list";
+//		return "/member/member-list";
 //	}
 //	@RequestMapping("/test.do")
 //	public String test(Model model) throws Exception{

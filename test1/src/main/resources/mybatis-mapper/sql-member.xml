@@ -8,6 +8,27 @@
 		FROM MEMBER
 		WHERE USERID = #{userId} AND PASSWORD = #{pwd}
 	</select>
+	
+	<insert id="memberJoin" parameterType="hashmap">
+		INSERT INTO MEMBER(USERID, PASSWORD, USERNAME, ADDRESS, STATUS, CDATETIME)
+		VALUES(#{userId}, #{pwd}, #{userName}, #{addr}, #{status}, SYSDATE)
+	</insert>
+	
+	<select id="selectMember" parameterType="hashmap" resultType="com.example.test1.model.Member">
+		SELECT *
+		FROM MEMBER
+		WHERE USERID = #{userId}
+	</select>
+	
+	<select id="getUserList" parameterType="hashmap" resultType="com.example.test1.model.Member">
+		SELECT *
+		FROM MEMBER
+	</select>
+	
+	<delete id="memberDelete" parameterType="hashmap" >
+		DELETE FROM MEMBER
+		WHERE USERID = #{userId}
+	</delete>
 </mapper>
 
 

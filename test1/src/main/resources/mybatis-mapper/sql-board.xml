@@ -43,10 +43,17 @@
 			CNT = CNT + 1
 		WHERE BOARDNO = #{boardNo}
 	</update>
+	
 	<delete id="deleteBoard" parameterType="hashmap" >
 		DELETE FROM BOARD
 		WHERE BOARDNO = #{boardNo}
 	</delete>
+	
+	<select id="selectUser" parameterType="hashmap" resultType="com.example.test1.model.Member">
+		SELECT *
+		FROM MEMBER 
+		WHERE USERID = #{userId}
+	</select>
 </mapper>
 
 
