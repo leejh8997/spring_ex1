@@ -10,18 +10,19 @@
 		<title>첫번째 페이지</title>
 	</head>
 	<style>
+		div {
+			margin-top: 5px;
+		}
 	</style>
 
 	<body>
 		<div id="app">
+			<div> 제목 : <input v-model="info.title"> </div>
 			<div>
-				제목 : <input v-model="info.title">
+				내용 : <textarea v-model="info.contents" cols="50" rows="20"></textarea>
 			</div>
 			<div>
-				내용 : <input v-model="info.title">
-			</div>
-			<div>
-				<button @click=fnSave()>저장</button>
+				<button @click="fnEdit">저장</button>
 			</div>
 		</div>
 	</body>
@@ -39,7 +40,8 @@
 				fnGetBoard() {
 					let self = this;
 					let nparmap = {
-						boardNo : self.boardNo,
+						boardNo: self.boardNo,
+						option: "UPDATE"
 					};
 					$.ajax({
 						url: "/board/view.dox",
@@ -52,21 +54,18 @@
 						}
 					});
 				},
-				fnSave : function(){
+				fnEdit: function () {
 					let self = this;
-					let nparmap = {
-						title : self.title,
-						contents : self.contents
-					};
+					let nparmap = self.info;
 					$.ajax({
-						url: "",
+						url: "/board/edit.dox",
 						dataType: "json",
 						type: "POST",
 						data: nparmap,
 						success: function (data) {
 							console.log(data);
-							
-							console.log(self.info);
+							alert("수정되었습니다");
+							location.href = "/board/list.do";
 						}
 					});
 				}

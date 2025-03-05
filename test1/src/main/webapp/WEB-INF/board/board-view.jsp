@@ -11,6 +11,10 @@
 		<title>첫번째 페이지</title>
 	</head>
 	<style>
+		.btn-link {
+			text-decoration: none;
+			color: red;
+		}
 	</style>
 
 	<body>
@@ -23,7 +27,7 @@
 				제목 : {{info.title}}
 			</div>
 			<div>
-				내용 : {{info.contents}}
+				내용 : <span v-html="info.contents"></span>
 			</div>
 			<div>
 				작성자 : {{info.userId}}
@@ -40,6 +44,30 @@
 					<button @click="fnRemove()">삭제</button>
 				</div>
 			</div>
+			<div v-for="item in cmtList">
+				<label v-if="updateCmtNo==item.commentNo">
+					{{item.userId}}:<input v-model="updateContents">
+				</label>
+				<label v-else>{{item.userId}}:{{item.contents}}</label>
+
+				
+				<template v-if="updateCmtNo == item.commentNo">
+					<button class="btn-link" @click="fnCmtUpdate(item.commentNo)" href="javascript:;">저장</button>
+					<button class="btn-link" @click="updateCmtNo=''" href="javascript:;">취소</button>
+				</template>
+					
+				<template v-else>
+					<template v-if="sessionId == item.userId || sessionStatus == 'A'"></template>
+						<button class="btn-link" @click="fnCmtWrite(item)" href="javascript:;">🖍</button>
+						<button class="btn-link" @click="fnCmtRemove(item.commentNo)" href="javascript:;">❌</button>
+					</template>
+				</template>
+				<hr>
+			</div>
+			<div>
+				<textarea v-model="editContents" cols="30" rows="10"></textarea>
+				<button @click="fnCmtEdit">등록</button>
+			</div>
 		</div>
 	</body>
 
@@ -51,7 +79,11 @@
 					info: {},
 					boardNo: "${map.boardNo}",
 					sessionId: "${sessionId}",
-					sessionStatus: "${sessionStatus}"
+					sessionStatus: "${sessionStatus}",
+					cmtList: [],
+					editContents: "",
+					updateContents: "",
+					updateCmtNo: "",
 				};
 			},
 			methods: {
@@ -60,7 +92,7 @@
 					let nparmap = {
 						boardNo: self.boardNo,
 						option: "select",
-						
+
 					};
 					$.ajax({
 						url: "/board/view.dox",
@@ -68,9 +100,11 @@
 						type: "POST",
 						data: nparmap,
 						success: function (data) {
-							console.log(self.sessionStatus);
+							console.log(data);
 							self.info = data.info;
 							console.log(self.info);
+							self.cmtList = data.cmtList;
+							console.log(self.cmtList);
 						}
 					});
 				},
@@ -94,7 +128,65 @@
 						}
 					});
 					location.href = "/board/list.do";
-				}
+				},
+				fnCmtEdit: function () {
+					let self = this;
+					let nparmap = {
+						editContents: self.editContents,
+						sessionId: self.sessionId,
+						boardNo: self.boardNo
+					};
+					$.ajax({
+						url: "/board/cmt-edit.dox",
+						dataType: "json",
+						type: "POST",
+						data: nparmap,
+						success: function (data) {
+							self.fnGetBoard();
+							self.editContents = "";
+						}
+					});
+				},
+				fnCmtUpdate: function (commentNo) {
+					let self = this;
+					let nparmap = {
+						commentNo: commentNo,
+						contents: self.updateContents
+					};
+					$.ajax({
+						url: "/board/cmt-update.dox",
+						dataType: "json",
+						type: "POST",
+						data: nparmap,
+						success: function (data) {
+								self.updateCmtNo = "";
+								self.fnGetBoard();
+						}
+					});
+				},
+				fnCmtRemove: function (commentNo) {
+					let self = this;
+					let nparmap = {
+						commentNo: commentNo,
+					};
+					if(!confirm("정말 삭제하시겠습니까?")){
+                   		return;
+                	}
+					$.ajax({
+						url: "/board/cmt-remove.dox",
+						dataType: "json",
+						type: "POST",
+						data: nparmap,
+						success: function (data) {
+							self.fnGetBoard();
+						}
+					});
+				},
+				fnCmtWrite: function (item) {
+					let self = this;
+					self.updateCmtNo = item.commentNo;
+					self.updateContents = item.contents;
+				},
 			},
 			mounted() {
 				let self = this;

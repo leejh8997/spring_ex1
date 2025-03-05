@@ -4,9 +4,15 @@
 
 <mapper namespace="com.example.test1.mapper.BoardMapper"> <!-- 자바의 implements 기능 -->
 	<select id="selectBoardList" parameterType="hashmap" resultType="com.example.test1.model.Board">
-		SELECT *
+		SELECT B.*, M.*, T.COMMENT_COUNT
 		FROM BOARD B
 		INNER JOIN MEMBER M ON B.USERID = M.USERID
+		LEFT JOIN (
+           SELECT B.BOARDNO, COUNT(B.BOARDNO) AS COMMENT_COUNT
+           FROM BOARD B
+           INNER JOIN BOARD_COMMENT C ON B.BOARDNO = C.BOARDNO
+           GROUP BY B.BOARDNO
+        ) T ON B.BOARDNO = T.BOARDNO
 		WHERE 1=1
 		<if test="searchOption != null and searchOption=='all'">
 			AND (TITLE LIKE '%' || #{keyword} || '%'
@@ -16,8 +22,10 @@
 			AND TITLE LIKE '%' || #{keyword} || '%'
 		</if>
 		<if test="searchOption != null and searchOption=='name'">
-			AND USERNAME LIKE '%' || #{keyword} || '%'
+			AND USERNAME LIKE '%' || #{keyword} || '%' 
 		</if>
+		ORDER BY B.BOARDNO
+		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
 	
 	<insert id="insertBoardList" parameterType="hashmap">
@@ -31,11 +39,13 @@
 		WHERE BOARDNO = #{boardNo}
 	</select>
 	
-	<select id="updateBoard" parameterType="hashmap" resultType="com.example.test1.model.Board">
-		SELECT *
-		FROM BOARD B
+	<update id="updateBoard" parameterType="hashmap">
+		UPDATE BOARD
+		SET
+			TITLE = #{title},
+			CONTENTS = #{contents}
 		WHERE BOARDNO = #{boardNo}
-	</select>
+	</update>
 	
 	<update id="updateCnt" parameterType="hashmap">
 		UPDATE BOARD
@@ -54,6 +64,54 @@
 		FROM MEMBER 
 		WHERE USERID = #{userId}
 	</select>
+	<delete id="deleteBoardList" parameterType="hashmap" >
+		DELETE FROM BOARD
+		WHERE BOARDNO IN 
+		<foreach collection="list" item="item" index="index" open="(" close=")" separator=","> <!--인덱스,오픈,클로즈 생략가능-->
+			#{item}
+		</foreach>
+	</delete>
+	
+	<select id="selectBoardCnt" parameterType="hashmap" resultType="int">
+		SELECT COUNT(BOARDNO)
+		FROM BOARD B
+		INNER JOIN MEMBER M ON B.USERID = M.USERID
+		WHERE 1=1
+		<if test="searchOption != null and searchOption=='all'">
+			AND (TITLE LIKE '%' || #{keyword} || '%'
+				OR USERNAME LIKE '%' || #{keyword} || '%')
+		</if>
+		<if test="searchOption != null and searchOption=='title'">
+			AND TITLE LIKE '%' || #{keyword} || '%'
+		</if>
+		<if test="searchOption != null and searchOption=='name'">
+			AND USERNAME LIKE '%' || #{keyword} || '%'
+		</if>
+	</select>
+	
+	<select id="selectCmtList" parameterType="hashmap" resultType="com.example.test1.model.Comment">
+		SELECT C.*
+		FROM BOARD B
+		LEFT JOIN BOARD_COMMENT C ON B.BOARDNO = C.BOARDNO
+		WHERE B.BOARDNO = #{boardNo}
+	</select>
+	
+	<insert id="cmtInsert" parameterType="hashmap">
+		INSERT INTO BOARD_COMMENT (COMMENTNO, BOARDNO, USERID, CONTENTS) 
+    	VALUES (COMMENT_SEQ.NEXTVAL, #{boardNo}, #{sessionId}, #{editContents})
+	</insert>
+	
+	<update id="cmtUpdate" parameterType="hashmap">
+		UPDATE BOARD_COMMENT
+		SET
+			CONTENTS = #{contents}
+		WHERE COMMENTNO = #{commentNo}
+	</update>
+	
+	<delete id="cmtDelete" parameterType="hashmap" >
+		DELETE FROM BOARD_COMMENT
+		WHERE COMMENTNO = #{commentNo}
+	</delete>
 </mapper>
 
 

@@ -16,4 +16,5 @@ public class Board {
     private String cdateTime;
     private String udateTime;
     private String userName;
+    private String commentCount;
 }

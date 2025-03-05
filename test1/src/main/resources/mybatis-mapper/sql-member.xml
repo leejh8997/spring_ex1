@@ -29,6 +29,15 @@
 		DELETE FROM MEMBER
 		WHERE USERID = #{userId}
 	</delete>
+	
+	<delete id="memberListDelete" parameterType="hashmap" >
+		DELETE FROM MEMBER
+		WHERE USERID IN (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	</delete>
 </mapper>
 
 

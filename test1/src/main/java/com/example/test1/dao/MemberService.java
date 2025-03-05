@@ -66,7 +66,7 @@ public class MemberService {
 		}
 		return resultMap;
 	}
-
+	// 중복체크를 위한 멤버 조회
 	public HashMap<String, Object> searchMember(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
@@ -78,5 +78,24 @@ public class MemberService {
 			System.out.println(e.getMessage());
 		}
 		return resultMap;
+	}
+	// 멤버 조회만(중복체크 매퍼 사용)
+	public HashMap<String, Object> getMember(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		Member member = memberMapper.selectMember(map);
+		if(member!=null) {
+			resultMap.put("member",member);
+			resultMap.put("result","success");
+		}
+		return null;
+	}
+
+	public HashMap<String, Object> memberListRemove(
+			HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		memberMapper.memberListDelete(map);	
+		return null;
 	}
 }

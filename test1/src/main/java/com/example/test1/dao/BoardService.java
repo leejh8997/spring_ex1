@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.test1.model.Board;
 import com.example.test1.model.Member;
+import com.example.test1.model.Comment;
 import com.example.test1.mapper.BoardMapper;
 
 @Service
@@ -20,9 +21,12 @@ public class BoardService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			List<Board> list = boardMapper.selectBoardList(map);
+			int count = boardMapper.selectBoardCnt(map);
+			
 			String result = "success";
 			resultMap.put("list", list);
 			resultMap.put("result", result);
+			resultMap.put("count", count);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			resultMap.put("result", "fail");
@@ -49,11 +53,13 @@ public class BoardService {
 		try {
 				if(map.containsKey("option")) {
 				boardMapper.updateCnt(map);
-			}
-			
+				}
+				
 			Board info = boardMapper.selectBoard(map);
+			List<Comment> cmtList = boardMapper.selectCmtList(map);
 			String result = "success";
 			resultMap.put("info", info);
+			resultMap.put("cmtList", cmtList);
 			resultMap.put("result", result);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -62,13 +68,12 @@ public class BoardService {
 		return resultMap;
 	}
 
-	public HashMap<String, Object> boardEdit(HashMap<String, Object> map) {
+	public HashMap<String, Object> editBoard(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		try {
-			Board info = boardMapper.updateBoard(map);
-			String result = "success";
-			resultMap.put("info", info);
+			boardMapper.updateBoard(map);
+			String result = "success";	
 			resultMap.put("result", result);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -101,6 +106,38 @@ public class BoardService {
 			resultMap.put("result", "fail");
 		}
 		return resultMap;
+	}
+
+	public HashMap<String, Object> boardListRemove(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			boardMapper.deleteBoardList(map);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+
+	public HashMap<String, Object> cmtEdit(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		boardMapper.cmtInsert(map);
+		return null;
+	}
+
+	public HashMap<String, Object> cmtUpdate(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		boardMapper.cmtUpdate(map);
+		return null;
+	}
+
+	public HashMap<String, Object> cmtRemove(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		boardMapper.cmtDelete(map);
+		return null;
 	}
 
 
