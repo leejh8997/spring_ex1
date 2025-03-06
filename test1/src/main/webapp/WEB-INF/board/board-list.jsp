@@ -48,7 +48,7 @@
 					<option value="name">작성자</option>
 				</select>
 
-				<select @change="fnBoardList" v-model="pageSize">
+				<select @change="fnPageSizeChange" v-model="pageSize">
 					<option value="5">5개씩</option>
 					<option value="10">10개씩</option>
 					<option value="15">15개씩</option>
@@ -186,7 +186,12 @@
 					let self = this;
 					self.page = num;
 					self.fnBoardList();
-				}
+				},
+				fnPageSizeChange: function () {
+					let self = this;
+					self.page = 1;  
+					self.fnBoardList();
+				},
 			},
 			mounted() {
 				let self = this;

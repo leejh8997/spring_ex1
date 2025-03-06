@@ -29,6 +29,9 @@
 			<div>
 				내용 : <span v-html="info.contents"></span>
 			</div>
+			<div v-for="item in fileList"> <!-- div에 v-if쓰거나 src에 옵셔널체이닝(fileList[0]?.filePath) 사용 -->
+				<img :src="item.filePath" alt="Image">
+			</div>
 			<div>
 				작성자 : {{info.userId}}
 			</div>
@@ -44,25 +47,27 @@
 					<button @click="fnRemove()">삭제</button>
 				</div>
 			</div>
-			<div v-for="item in cmtList">
-				<label v-if="updateCmtNo==item.commentNo">
-					{{item.userId}}:<input v-model="updateContents">
-				</label>
-				<label v-else>{{item.userId}}:{{item.contents}}</label>
+			<div v-if="cmtList[0]?.commentNo!=null">
+				<div v-for="item in cmtList">
+					<label v-if="updateCmtNo==item.commentNo">
+						{{item.userId}}:<input v-model="updateContents">
+					</label>
+					<label v-else>{{item.userId}}:{{item.contents}}</label>
 
-				
-				<template v-if="updateCmtNo == item.commentNo">
-					<button class="btn-link" @click="fnCmtUpdate(item.commentNo)" href="javascript:;">저장</button>
-					<button class="btn-link" @click="updateCmtNo=''" href="javascript:;">취소</button>
-				</template>
+
+					<template v-if="updateCmtNo == item.commentNo">
+						<button class="btn-link" @click="fnCmtUpdate(item.commentNo)" href="javascript:;">저장</button>
+						<button class="btn-link" @click="updateCmtNo=''" href="javascript:;">취소</button>
+					</template>
 					
-				<template v-else>
-					<template v-if="sessionId == item.userId || sessionStatus == 'A'"></template>
+					<template v-else>
+						<template v-if="sessionId == item.userId || sessionStatus == 'A'"></template>
 						<button class="btn-link" @click="fnCmtWrite(item)" href="javascript:;">🖍</button>
 						<button class="btn-link" @click="fnCmtRemove(item.commentNo)" href="javascript:;">❌</button>
 					</template>
-				</template>
-				<hr>
+					</template>
+					<hr>
+				</div>
 			</div>
 			<div>
 				<textarea v-model="editContents" cols="30" rows="10"></textarea>
@@ -84,6 +89,8 @@
 					editContents: "",
 					updateContents: "",
 					updateCmtNo: "",
+					fileList: [],
+					path:"",
 				};
 			},
 			methods: {
@@ -105,6 +112,10 @@
 							console.log(self.info);
 							self.cmtList = data.cmtList;
 							console.log(self.cmtList);
+							self.fileList = data.file;
+							console.log(self.fileList);
+							
+							
 						}
 					});
 				},
@@ -159,8 +170,8 @@
 						type: "POST",
 						data: nparmap,
 						success: function (data) {
-								self.updateCmtNo = "";
-								self.fnGetBoard();
+							self.updateCmtNo = "";
+							self.fnGetBoard();
 						}
 					});
 				},
@@ -169,9 +180,9 @@
 					let nparmap = {
 						commentNo: commentNo,
 					};
-					if(!confirm("정말 삭제하시겠습니까?")){
-                   		return;
-                	}
+					if (!confirm("정말 삭제하시겠습니까?")) {
+						return;
+					}
 					$.ajax({
 						url: "/board/cmt-remove.dox",
 						dataType: "json",

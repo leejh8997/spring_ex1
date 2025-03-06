@@ -26,6 +26,10 @@ public class MemberService {
 			Member member = memberMapper.getMember(map);
 			session.setAttribute("sessionId", member.getUserId());
 			session.setAttribute("sessionStatus", member.getStatus());
+			session.setAttribute("sessionName", member.getUserName());
+			session.setMaxInactiveInterval(60*60);//60*60초
+//			session.invalidate();// 세션 정보 삭제
+//			session.removeAttribute("sessionId");//1개씩삭제할때
 			String result = "success";
 			resultMap.put("member", member);
 			resultMap.put("result", result);

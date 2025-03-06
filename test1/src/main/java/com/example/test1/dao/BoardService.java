@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.test1.model.Board;
+import com.example.test1.model.File;
 import com.example.test1.model.Member;
 import com.example.test1.model.Comment;
 import com.example.test1.mapper.BoardMapper;
@@ -22,7 +23,6 @@ public class BoardService {
 		try {
 			List<Board> list = boardMapper.selectBoardList(map);
 			int count = boardMapper.selectBoardCnt(map);
-			
 			String result = "success";
 			resultMap.put("list", list);
 			resultMap.put("result", result);
@@ -39,7 +39,9 @@ public class BoardService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 	        int result = boardMapper.insertBoardList(map); // INSERT 결과 개수
+	        System.out.println(map);
 	        resultMap.put("result", result > 0 ? "success" : "fail");
+	        resultMap.put("boardNo", map.get("boardNo"));
 	    } catch (Exception e) {
 	        resultMap.put("result", "fail");
 	    }
@@ -54,10 +56,12 @@ public class BoardService {
 				if(map.containsKey("option")) {
 				boardMapper.updateCnt(map);
 				}
-				
+			
+			List<File> file = boardMapper.selectFile(map);
 			Board info = boardMapper.selectBoard(map);
 			List<Comment> cmtList = boardMapper.selectCmtList(map);
 			String result = "success";
+			resultMap.put("file", file);
 			resultMap.put("info", info);
 			resultMap.put("cmtList", cmtList);
 			resultMap.put("result", result);
@@ -138,6 +142,12 @@ public class BoardService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		boardMapper.cmtDelete(map);
 		return null;
+	}
+
+	public void addBoardFile(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		boardMapper.insertBoardFile(map);
+		
 	}
 
 

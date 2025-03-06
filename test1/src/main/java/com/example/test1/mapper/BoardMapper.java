@@ -9,6 +9,7 @@ import com.example.test1.model.Board;
 import com.example.test1.model.Member;
 
 import com.example.test1.model.Comment;
+import com.example.test1.model.File;
 
 @Mapper // xml 호출하려면 반드시 명시
 public interface BoardMapper {
@@ -38,6 +39,10 @@ public interface BoardMapper {
 	void cmtUpdate(HashMap<String, Object> map);
 
 	void cmtDelete(HashMap<String, Object> map);
+
+	void insertBoardFile(HashMap<String, Object> map);
+
+	List<File> selectFile(HashMap<String, Object> map);
 
 	
 	
