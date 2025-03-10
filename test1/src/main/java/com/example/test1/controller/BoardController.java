@@ -53,6 +53,10 @@ public class BoardController {
 		request.setAttribute("map", map);
         return "/board/board-edit"; 
     }
+	@RequestMapping("/portone.do")
+	public String portone(Model model) throws Exception{
+		return "/portone";
+	}
 	
 	// 게시글 목록
 	@RequestMapping(value = "/board/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
