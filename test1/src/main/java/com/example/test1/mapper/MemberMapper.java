@@ -21,6 +21,8 @@ public interface MemberMapper {
 	int memberDelete(HashMap<String, Object> map);
 
 	void memberListDelete(HashMap<String, Object> map);
+
+	void pwdUpdate(HashMap<String, Object> map);
 	
 	
 }

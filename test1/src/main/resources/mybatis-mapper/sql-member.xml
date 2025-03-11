@@ -38,6 +38,12 @@
 		</foreach>
 		)
 	</delete>
+	
+	<update id="pwdUpdate" parameterType="hashmap" >
+		UPDATE MEMBER
+		SET PASSWORD = #{pwd1}
+		WHERE USERID = #{userId}
+	</update>
 </mapper>
 
 

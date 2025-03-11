@@ -102,4 +102,17 @@ public class MemberService {
 		memberMapper.memberListDelete(map);	
 		return null;
 	}
+
+	public HashMap<String, Object> changePwd(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			memberMapper.pwdUpdate(map);
+			resultMap.put("result", "success");
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");
+		}
+		return resultMap;
+	}
 }

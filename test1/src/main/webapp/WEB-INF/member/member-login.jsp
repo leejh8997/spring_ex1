@@ -20,6 +20,7 @@
 			비밀번호 : <input v-model="pwd">  
 		</div>
 		<button @click="fnLogin">로그인</button>
+		<button @click="fnSearchPwd">비밀번호 찾기</button>
 	</div>
 </body>
 </html>
@@ -57,7 +58,10 @@
 						}
 					}
 				});
-            }
+            },
+			fnSearchPwd(){
+				location="/member/pwd.do";
+			}
         },
         mounted() {
             var self = this;

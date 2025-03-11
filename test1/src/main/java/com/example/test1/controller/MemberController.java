@@ -48,7 +48,26 @@ public class MemberController {
 	public String list(Model model) throws Exception{
 		return "/member/member-list";
 	}
+	//결제 테스트
+	@RequestMapping("/pay.do")
+	public String pay(Model model) throws Exception{
+		return "/pay";
+	}
+	@RequestMapping("/auth.do")
+	public String auth(Model model) throws Exception{
+		return "/auth";
+	}
+	@RequestMapping("/member/pwd.do")
+	public String pwd(Model model) throws Exception{
+		return "/member/pwd-search";
+	}
 	
+	@RequestMapping("/member/reset-pwd.do")
+	public String resetPwd(HttpServletRequest request,Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		request.setAttribute("map", map);
+		return "/member/reset-pwd";
+	}
+		
 	//로그인
 	@RequestMapping(value = "/member/login.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
@@ -117,5 +136,13 @@ public class MemberController {
 		map.put("list", list);
 		resultMap = memberService.memberListRemove(map);
 		return new Gson().toJson(resultMap); //받는 타입을 json으로 정의해서 json 형태로 변환
+	}
+	// 비밀번호 변경
+	@RequestMapping(value = "/member/reset-pwd.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String changePwd(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = memberService.changePwd(map);
+		return new Gson().toJson(resultMap); 
 	}
 }
