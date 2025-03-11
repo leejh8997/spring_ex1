@@ -15,9 +15,8 @@
     </head>
 
     <body>
+        <jsp:include page="../common/header.jsp" />
         <div id="app">
-            <jsp:include page="../common/header.jsp" />
-
             <main>
                 <section class="product-list">
                     <!-- 제품 항목 -->
@@ -29,19 +28,6 @@
                             <p class="price">{{item.price}}</p>
                         </a>
                     </div>
-                    <!-- <div class="product-item">
-                    <img src="../img/202526104656272.png" alt="제품 2">
-                    <h3>짜장면</h3>
-                    <p>중국의 대표적인 면 요리, 짜장면!</p>
-                    <p class="price">₩7,500</p>
-                </div>
-                <div class="product-item">
-                    <img src="../img/202526105554262.png" alt="제품 3">
-                    <h3>피자</h3>
-                    <p>풍부한 치즈가 일품인 피자!</p>
-                    <p class="price">₩12,000</p>
-                </div> -->
-
                 </section>
             </main>
         </div>

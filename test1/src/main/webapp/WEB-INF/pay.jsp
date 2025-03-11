@@ -29,6 +29,7 @@
 			},
 			methods: {
 				fnPayment() {
+					let self = this;
 					IMP.request_pay({
 						channelKey: "channel-key-bf43e218-5567-4875-96da-3270e1fba054",
 						pay_method: "card",

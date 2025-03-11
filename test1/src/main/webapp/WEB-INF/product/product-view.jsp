@@ -9,113 +9,17 @@
         <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
         <script src="/js/page-Change.js"></script>
         <link rel="stylesheet" href="../css/product-style.css">
+        <link rel="stylesheet" href="../css/view.css">
+        <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
         <title>첫번째 페이지</title>
     </head>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f8f8;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .product-container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            margin: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* 왼쪽 영역 (이미지) */
-        .image-container {
-            width: 50%;
-            text-align: center;
-        }
-
-        .main-image {
-            width: 100%;
-            max-height: 300px;
-            object-fit: contain;
-            border-radius: 10px;
-        }
-
-        .sub-images {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .sub-images img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            cursor: pointer;
-            border: 2px solid transparent;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-
-        .sub-images img:hover {
-            border: 2px solid #007bff;
-        }
-
-        /* 오른쪽 영역 (구매 버튼, 개수 조절) */
-        .info-container {
-            width: 45%;
-            text-align: left;
-        }
-
-        .product-name {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .product-price {
-            font-size: 20px;
-            color: #e67e22;
-            margin-bottom: 10px;
-        }
-
-        .quantity-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .quantity-input {
-            width: 40px;
-            text-align: center;
-            font-size: 16px;
-            padding: 5px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .buy-button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            font-size: 18px;
-            cursor: pointer;
-            border-radius: 5px;
-            width: 100%;
-        }
-
-        .buy-button:hover {
-            background-color: #0056b3;
-        }
+        
     </style>
 
     <body>
+        <jsp:include page="../common/header.jsp"/>
         <div id="app">
-            <jsp:include page="../common/header.jsp" />
             <div class="product-container">
 
                 <!-- 왼쪽 (이미지) -->
@@ -129,17 +33,18 @@
 
                 <!-- 오른쪽 (구매 정보) -->
                 <div class="info-container">
-                    <div class="product-name">에이스침대 매트리스</div>
-                    <div class="product-price">₩987,360</div>
+                    <div class="product-name">{{info.itemName}}</div>
+                    <p>{{info.itemInfo}}</p>
+                    <div class="product-price">{{info.price}}</div>
 
                     <!-- 개수 선택 -->
                     <div class="quantity-container">
                         <label for="quantity">수량:</label>
-                        <input type="number" id="quantity" class="quantity-input" value="1" min="1">
+                        <input type="number" v-model="quantity" class="quantity-input"  min="1">
                     </div>
 
                     <!-- 구매 버튼 -->
-                    <button class="buy-button">바로 구매</button>
+                    <button @click="fnPayment" class="buy-button">바로 구매</button>
                 </div>
             </div>
         </div>
@@ -147,11 +52,13 @@
 
     </html>
     <script>
+        const userCode = "imp14397622";
+		IMP.init(userCode);
         const app = Vue.createApp({
             data() {
                 return {
                     itemNo:"${map.itemNo}",
-                    info: [],
+                    info: {},
                     mainImage: "", // 기본 메인 이미지
                     subImages: [],
                     tempImage: "",
@@ -181,10 +88,30 @@
                             for(let i=0; i<data.subImage.length; i++){
                                 self.subImages[i] = (data.subImage[i].filePath);
                             }
-                            console.log(self.subImages);
+                            console.log(data.subImage);
                         }
                     });
-                }
+                },
+                fnPayment(){
+                    let self = this;
+                    IMP.request_pay({
+						channelKey: "channel-key-bf43e218-5567-4875-96da-3270e1fba054",
+						pay_method: "card",
+						merchant_uid: "merchant" + new Date().getTime(),
+						name: "테스트 결제",
+						amount: (self.info.price * self.quantity),
+						buyer_tel: "010-0000-0000",
+					}, function (rsp) { // callback
+						if (rsp.success) {
+							// 결제 성공 시
+							alert("성공");
+							console.log(rsp);
+						} else {
+							// 결제 실패 시
+							alert("실패");
+						}
+					});
+                },
             },
             mounted() {
                 let self = this;
