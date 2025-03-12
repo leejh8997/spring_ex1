@@ -50,4 +50,28 @@ public class ProductService {
 		}
 		return resultMap;
 	}
+
+	public HashMap<String, Object> productAdd(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			int result = productMapper.insertProduct(map);
+			resultMap.put("result", result > 0 ? "success" : "fail");
+	        resultMap.put("itemNo", map.get("itemNo"));
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");
+		}
+		return resultMap;
+	}
+
+	public void addProductFile(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		try {
+			productMapper.insertProductFile(map);
+		}catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+				
+	}
 }

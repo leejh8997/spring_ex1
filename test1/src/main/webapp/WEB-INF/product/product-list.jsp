@@ -29,6 +29,7 @@
                         </a>
                     </div>
                 </section>
+                <button @click="fnProductAdd">제품등록</button>
             </main>
         </div>
     </body>
@@ -59,6 +60,9 @@
                 },
                 fnPageChange(itemNo){
                     pageChange("/product/view.do",{itemNo: itemNo});
+                },
+                fnProductAdd(){
+                    location.href="/product/add.do";
                 }
             },
             mounted() {

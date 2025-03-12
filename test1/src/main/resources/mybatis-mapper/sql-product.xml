@@ -19,6 +19,16 @@
 		INNER JOIN TBL_PRODUCT_IMG I ON P.ITEM_NO = I.ITEM_NO AND I.THUMBNAIL = 'N'
 		WHERE P.ITEM_NO = #{itemNo}
 	</select>	
+	
+	<insert id="insertProduct" parameterType="hashmap" useGeneratedKeys="true" keyColumn="ITEM_No" keyProperty="itemNo">
+		INSERT INTO TBL_PRODUCT (ITEM_NO, ITEM_NAME, PRICE, ITEM_INFO)
+    	VALUES (PRODUCT_SEQ.NEXTVAL, #{itemName}, #{price}, #{itemInfo})
+	</insert>
+	
+	<insert id="insertProductFile" parameterType="hashmap">
+		INSERT INTO TBL_PRODUCT_IMG 
+    	VALUES (#{itemNo}, #{path}, #{fileName}, #{thumbNail})
+	</insert>
 </mapper>
 
 
