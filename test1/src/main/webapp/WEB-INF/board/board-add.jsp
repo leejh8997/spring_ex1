@@ -69,6 +69,7 @@
 									form.append("file1", $("#file1")[0].files[i]);
 								}
 								form.append("boardNo", data.boardNo); // 임시 pk
+								console.log(data.boardNo);
 								self.upload(form);
 							}else if (data.result == "success") {
 								alert("저장");

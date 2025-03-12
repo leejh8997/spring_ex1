@@ -106,6 +106,7 @@ public class ProductController {
 					
 					// insert 쿼리 실행
 					productService.addProductFile(map);
+					
 					count++;
 				}	
 				

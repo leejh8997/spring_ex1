@@ -40,9 +40,11 @@ public interface BoardMapper {
 
 	void cmtDelete(HashMap<String, Object> map);
 
-	void insertBoardFile(HashMap<String, Object> map);
+//	void insertBoardFile(HashMap<String, Object> map);
 
 	List<File> selectFile(HashMap<String, Object> map);
+
+	void insertBoardFile(List<HashMap<String, Object>> fileList);
 
 	
 	

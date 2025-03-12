@@ -1,6 +1,7 @@
 package com.example.test1.controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,7 @@ public class UploadController {
 //		System.out.println(multi.size());
 		String url = null;
 		String path="c:\\img";
+		List<HashMap<String, Object>> fileList = new ArrayList<>();
 		try {
 			for(MultipartFile file : multi) {			
 				//String uploadpath = request.getServletContext().getRealPath(path);
@@ -58,16 +60,16 @@ public class UploadController {
 					map.put("originFilename", originFilename);
 					map.put("extName", extName);
 					map.put("size", size);
+					System.out.println("boardNO===>"+boardNo);
 					map.put("boardNo", boardNo);
 					
 					// insert 쿼리 실행
-				    boardService.addBoardFile(map);
-					
-					model.addAttribute("filename", file.getOriginalFilename());
-					model.addAttribute("uploadPath", imgfile.getAbsolutePath());
+					fileList.add(map);				
+//					model.addAttribute("filename", file.getOriginalFilename());
+//					model.addAttribute("uploadPath", imgfile.getAbsolutePath());
 				}	
-				
 			}
+			boardService.addBoardFile(fileList);
 		}catch(Exception e) {
 			System.out.println(e);
 		}

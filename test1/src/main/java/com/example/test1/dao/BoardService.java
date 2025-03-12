@@ -144,10 +144,22 @@ public class BoardService {
 		return null;
 	}
 
-	public void addBoardFile(HashMap<String, Object> map) {
+//	public void addBoardFile(HashMap<String, Object> map) {
+//		// TODO Auto-generated method stub
+//		boardMapper.insertBoardFile(map);
+//		
+//	}
+
+	public void addBoardFile(List<HashMap<String, Object>> fileList) {
 		// TODO Auto-generated method stub
-		boardMapper.insertBoardFile(map);
 		
+		System.out.println(fileList);
+		try {
+			boardMapper.insertBoardFile(fileList);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
 	}
 
 
