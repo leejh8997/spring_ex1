@@ -21,6 +21,7 @@
 		</div>
 		<button @click="fnLogin">로그인</button>
 		<button @click="fnSearchPwd">비밀번호 찾기</button>
+		<button @click="fnJoin">회원가입</button>
 	</div>
 </body>
 </html>
@@ -60,7 +61,10 @@
 				});
             },
 			fnSearchPwd(){
-				location="/member/pwd.do";
+				location.href="/member/pwd.do";
+			},
+			fnJoin(){
+				location.href="/member/add.do";
 			}
         },
         mounted() {

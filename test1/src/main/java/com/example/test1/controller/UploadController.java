@@ -63,6 +63,7 @@ public class UploadController {
 					System.out.println("boardNO===>"+boardNo);
 					map.put("boardNo", boardNo);
 					
+//					boardService.addBoardFile(map);
 					// insert 쿼리 실행
 					fileList.add(map);				
 //					model.addAttribute("filename", file.getOriginalFilename());

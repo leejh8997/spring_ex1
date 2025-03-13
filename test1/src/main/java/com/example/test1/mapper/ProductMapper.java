@@ -19,4 +19,6 @@ public interface ProductMapper {
 
 	void insertProductFile(HashMap<String, Object> map);
 
+	void insertPayHistory(HashMap<String, Object> map);
+
 }

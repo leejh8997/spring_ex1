@@ -42,6 +42,9 @@
 	<body>
 		<div id="app">
 			<div>
+				<div>
+					<button @click="fnProductPage">제품보기</button>
+				</div>
 				<select v-model="searchOption">
 					<option value="all">:: 전체 ::</option>
 					<option value="title">제목</option>
@@ -192,10 +195,17 @@
 					self.page = 1;  
 					self.fnBoardList();
 				},
+				fnProductPage: function(){
+					location.href="/product/list.do";
+				}
 			},
 			mounted() {
 				let self = this;
 				self.fnBoardList();
+				if(self.sessionStatus == ""){
+					alert("로그인 후 사용하십시오.");
+					location.href="/member/login.do";
+				}
 
 			}
 		});

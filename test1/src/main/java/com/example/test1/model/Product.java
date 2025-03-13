@@ -11,4 +11,11 @@ public class Product {
 	private String fileName;
 	private String thumbNail;
 	private String itemInfo;
+	private String orderId;
+	private String userId;
+	private String amount;
+	private String paymentDate;
+	private String productName;
+	private String buyerTel;
+	
 }

@@ -14,11 +14,11 @@
         <title>첫번째 페이지</title>
     </head>
     <style>
-        
+
     </style>
 
     <body>
-        <jsp:include page="../common/header.jsp"/>
+        <jsp:include page="../common/header.jsp" />
         <div id="app">
             <div class="product-container">
 
@@ -34,13 +34,13 @@
                 <!-- 오른쪽 (구매 정보) -->
                 <div class="info-container">
                     <div class="product-name">{{info.itemName}}</div>
-                    <p>{{info.itemInfo}}</p>
-                    <div class="product-price">{{info.price}}</div>
+                    <p>제품 설명 : {{info.itemInfo}}</p>
+                    <div class="product-price">￦ {{info.price}} 원</div>
 
                     <!-- 개수 선택 -->
                     <div class="quantity-container">
                         <label for="quantity">수량:</label>
-                        <input type="number" v-model="quantity" class="quantity-input"  min="1">
+                        <input type="number" v-model="quantity" class="quantity-input" min="1">개
                     </div>
 
                     <!-- 구매 버튼 -->
@@ -53,16 +53,19 @@
     </html>
     <script>
         const userCode = "imp14397622";
-		IMP.init(userCode);
+        IMP.init(userCode);
         const app = Vue.createApp({
             data() {
                 return {
-                    itemNo:"${map.itemNo}",
+                    itemNo: "${map.itemNo}",
                     info: {},
                     mainImage: "", // 기본 메인 이미지
                     subImages: [],
                     tempImage: "",
                     quantity: 1,
+                    userId: "${sessionId}",
+                    phone: "${sessionPhone}",
+
                 };
             },
             methods: {
@@ -70,11 +73,13 @@
                     this.tempImage = this.mainImage;
                     this.mainImage = this.subImages[index]; // 클릭한 이미지로 변경
                     this.subImages[index] = this.tempImage;
+
                 },
                 fnProductView() {
                     let self = this;
                     let nparmap = {
                         itemNo: self.itemNo
+
                     };
                     $.ajax({
                         url: "/product/view.dox",
@@ -85,32 +90,65 @@
                             console.log(data);
                             self.info = data.info;
                             self.mainImage = data.info.filePath;
-                            for(let i=0; i<data.subImage.length; i++){
+                            for (let i = 0; i < data.subImage.length; i++) {
                                 self.subImages[i] = (data.subImage[i].filePath);
                             }
                             console.log(data.subImage);
                         }
                     });
                 },
-                fnPayment(){
+                fnPayment() {
                     let self = this;
+                    if (!self.userId || self.userId.trim() == "") {
+                        alert("로그인 후 사용하십시오.");
+                        location.href = "/member/login.do";
+                        return;
+                    }
                     IMP.request_pay({
-						channelKey: "channel-key-bf43e218-5567-4875-96da-3270e1fba054",
-						pay_method: "card",
-						merchant_uid: "merchant" + new Date().getTime(),
-						name: "테스트 결제",
-						amount: (self.info.price * self.quantity),
-						buyer_tel: "010-0000-0000",
-					}, function (rsp) { // callback
-						if (rsp.success) {
-							// 결제 성공 시
-							alert("성공");
-							console.log(rsp);
-						} else {
-							// 결제 실패 시
-							alert("실패");
-						}
-					});
+                        channelKey: "channel-key-bf43e218-5567-4875-96da-3270e1fba054",
+                        pay_method: "card",
+                        merchant_uid: "merchant" + new Date().getTime(),
+                        name: self.info.itemName + " 결제",
+                        amount: (self.info.price * self.quantity),
+                        buyer_tel: self.phone,
+                        buyer_email: "test@test.com",
+
+                    }, function (rsp) { // callback
+                        if (rsp.success) {
+                            // 결제 성공 시
+                            alert("성공");
+                            console.log(rsp);
+                            let nparmap = {
+                                itemNo: self.itemNo,
+                                orderId: rsp.merchant_uid,
+                                userId: self.userId,
+                                amount: (self.info.price * self.quantity),
+                                buyerTel: self.phone,
+                                productName: self.info.itemName + "결제",
+                            };
+                            $.ajax({
+                                url: "/product/payHistory.dox",
+                                dataType: "json",
+                                type: "POST",
+                                data: nparmap,
+                                success: function (data) {
+                                    alert("결제 정보 저장");
+                                }
+                            });
+                        } else {
+                            // 결제 실패 시
+                            console.log(rsp);
+
+
+
+                            console.log(self.itemNo);
+                            console.log((self.info.price * self.quantity));
+                            console.log(self.userId);
+                            console.log(rsp.merchant_uid);
+
+                            alert("실패");
+                        }
+                    });
                 },
             },
             mounted() {

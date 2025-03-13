@@ -18,6 +18,9 @@
         <jsp:include page="../common/header.jsp" />
         <div id="app">
             <main>
+                <div class="board-add">
+                    <button @click="fnProductAdd">제품등록</button>
+                </div>
                 <section class="product-list">
                     <!-- 제품 항목 -->
                     <div class="product-item" v-for="item in list">
@@ -25,11 +28,11 @@
                             <img :src="item.filePath" alt="제품 1">
                             <h3>{{item.itemName}}</h3>
                             <p>{{item.itemInfo}}</p>
-                            <p class="price">{{item.price}}</p>
+                            <p class="price">￦ {{item.price}} 원</p>
                         </a>
                     </div>
                 </section>
-                <button @click="fnProductAdd">제품등록</button>
+                
             </main>
         </div>
     </body>
@@ -40,12 +43,18 @@
             data() {
                 return {
                     list: [],
+                    sessionId: "${sessionId}",
+					sessionStatus: "${sessionStatus}",
+                    
                 };
             },
             methods: {
-                fnProductList() {
+                fnProductList(keyword) {
                     var self = this;
-                    var nparmap = {};
+                    
+                    var nparmap = {
+                        keyword: keyword
+                    };
                     $.ajax({
                         url: "/product/list.dox",
                         dataType: "json",
@@ -54,7 +63,8 @@
                         success: function (data) {
                             console.log(data);
                             self.list = data.product;
-                            console.log(self.list);
+                            console.log(keyword);
+
                         }
                     });
                 },
@@ -68,6 +78,9 @@
             mounted() {
                 var self = this;
                 self.fnProductList();
+                emitter.on('call-main-function', (data) => {
+                    self.fnProductList(data.keyword);
+                });
             }
         });
         app.mount('#app');

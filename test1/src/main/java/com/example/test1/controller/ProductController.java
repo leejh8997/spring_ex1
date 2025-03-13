@@ -65,6 +65,15 @@ public class ProductController {
 		return new Gson().toJson(resultMap); 
 	}
 	
+	
+	@RequestMapping(value = "/product/payHistory.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String payHistoryAdd(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = productService.payHistoryAdd(map);
+		return new Gson().toJson(resultMap); 
+	}
+	
 	@RequestMapping("/product/fileUpload.dox")
 	public String result(@RequestParam("file1") List<MultipartFile> multi, @RequestParam("itemNo") int itemNo, HttpServletRequest request,HttpServletResponse response, Model model)
 	{

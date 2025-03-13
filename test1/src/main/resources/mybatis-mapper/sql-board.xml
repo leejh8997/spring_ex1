@@ -128,11 +128,16 @@
 <!--	collection 이름은 언제 정해지는지? 파라미터 타입을 list나java.util.List써야 되는지? -->
 <!--	foreach안에서 왜 시퀀스 한번만 증가하는지?-->
 	<insert id="insertBoardFile" parameterType="java.util.List">
-    <foreach collection="list" item="file" separator=";">
-        INSERT INTO BOARD_FILE (FILENO, BOARDNO, FILEPATH, FILENAME, FILEORGNAME, FILESIZE, FILEETC)
-        VALUES (FILE_SEQ.NEXTVAL, #{file.boardNo}, #{file.path}, #{file.filename}, 
-                #{file.originFilename}, #{file.size}, #{file.extName})
+		INSERT  INTO BOARD_FILE (FILENO, BOARDNO, FILEPATH, FILENAME, FILEORGNAME, FILESIZE, FILEETC)
+		SELECT FILE_SEQ.NEXTVAL, A.* FROM(
+    <foreach collection="list" index="index" item="file" separator="UNION ALL">
+       SELECT #{file.boardNo} AS BOARDNO,  #{file.path} AS FILEPATH, 
+                #{file.filename} AS FILENAME, #{file.originFilename} AS FILEORGNAME, #{file.size} AS FILESIZE, #{file.extName} AS FILEETC
+       FROM DUAL
+<!--        VALUES (FILE_SEQ.NEXTVAL, #{file.boardNo}, #{file.path}, -->
+<!--                #{file.filename}, #{file.originFilename}, #{file.size}, #{file.extName})-->
     </foreach>
+	) A
 </insert>
 	
 </mapper>

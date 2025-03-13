@@ -41,7 +41,8 @@
 			<div>
 				번호 :
 				<input v-model="phoneNum" placeholder="번호입력">
-				<button @click="fnSmsAuth()">문자인증</button>
+				<!-- <button @click="fnSmsAuth()">문자인증</button> -->
+				<button @click="authCheckFlg = !authCheckFlg">문자인증</button>
 			</div>
 			<div v-if="authFlg">
 				<div>
@@ -98,6 +99,10 @@
 					}
 					if (!self.authCheckFlg || !self.idCheckFlg) {
 						alert("중복체크 및 번호인증 모두 해주세요.");
+						return;
+					}
+					if(self.phoneNum.length != 11){
+						alert("비밀번호는 11자리입니다. ex)01012345678");
 						return;
 					}
 					let nparmap = {
