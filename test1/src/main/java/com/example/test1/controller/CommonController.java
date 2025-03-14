@@ -23,6 +23,27 @@ public class CommonController {
 	@Autowired
 	CommonService commonService;
 	
+	@RequestMapping("/map.do") 
+    public String getMap(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		request.setAttribute("map", map);
+        return "/product/map"; 
+    }
+	@RequestMapping("/map2.do") 
+    public String getMap2(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		request.setAttribute("map", map);
+        return "/product/map2"; 
+    }
+	@RequestMapping("/swiper.do") 
+    public String swiper(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		request.setAttribute("map", map);
+        return "/swiper"; 
+    }
+	@RequestMapping("/datePicker.do") 
+    public String datePick(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		request.setAttribute("map", map);
+        return "/datepicker"; 
+    }
+	
 	
 	@RequestMapping(value = "/menu.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
