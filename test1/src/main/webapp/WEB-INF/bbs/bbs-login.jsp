@@ -20,8 +20,6 @@
 			비밀번호 : <input v-model="pwd" @keyup.enter="fnLogin">  
 		</div>
 		<button @click="fnLogin">로그인</button>
-		<button @click="fnSearchPwd">비밀번호 찾기</button>
-		<button @click="fnJoin">회원가입</button>
 	</div>
 </body>
 </html>
@@ -33,7 +31,6 @@
 				pwd : "",
 				member : [],
 				sessionId: "${sessionId}",
-				sessionStatus: "${sessionStatus}",
             };
         },
         methods: {
@@ -53,19 +50,13 @@
 						console.log(self.member);
 						if(data.result == "success"){
 							alert(data.member.userName + "님 환영합니다!");
-							pageChange("/board/list.do",{sessionId : self.sessionId , sessionStatus: self.sessionStatus});
+							pageChange("/bbs/list.do",{sessionId : self.sessionId});
 						}else{
 							alert("아이디/패스워드 확인하세요.");
 						}
 					}
 				});
             },
-			fnSearchPwd(){
-				location.href="/member/pwd.do";
-			},
-			fnJoin(){
-				location.href="/member/add.do";
-			}
         },
         mounted() {
            

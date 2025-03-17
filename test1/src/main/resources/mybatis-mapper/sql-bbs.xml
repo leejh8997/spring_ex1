@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.test1.mapper.BbsMapper"> <!-- 자바의 implements 기능 -->
+	
+	<select id="selectBbsList" parameterType="hashmap" resultType="com.example.test1.model.Bbs">
+		SELECT *
+		FROM TBL_BBS B	
+		WHERE 1=1
+		<if test="searchOption != null and searchOption=='all'">
+			AND (TITLE LIKE '%' || #{keyword} || '%'
+				OR USER_ID LIKE '%' || #{keyword} || '%')
+		</if>
+		<if test="searchOption != null and searchOption=='title'">
+			AND TITLE LIKE '%' || #{keyword} || '%'
+		</if>
+		<if test="searchOption != null and searchOption=='name'">
+			AND USER_ID LIKE '%' || #{keyword} || '%' 
+		</if>
+		ORDER BY BBS_NUM DESC
+		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+	</select>
+	
+	<select id="selectBbsCnt" parameterType="hashmap" resultType="int">
+		SELECT COUNT(BBS_NUM)
+		FROM TBL_BBS B
+		WHERE 1=1
+		<if test="searchOption != null and searchOption=='all'">
+			AND (TITLE LIKE '%' || #{keyword} || '%'
+				OR USER_ID LIKE '%' || #{keyword} || '%')
+		</if>
+		<if test="searchOption != null and searchOption=='title'">
+			AND TITLE LIKE '%' || #{keyword} || '%'
+		</if>
+		<if test="searchOption != null and searchOption=='name'">
+			AND USER_ID LIKE '%' || #{keyword} || '%'
+		</if>
+	</select>
+	
+	<insert id="insertBbsList" parameterType="hashmap" useGeneratedKeys="true" keyColumn="BBS_NUM" keyProperty="bbsNum">
+		INSERT INTO TBL_BBS(BBS_NUM, TITLE, CONTENTS, HIT, USER_ID, CDATETIME, UDATETIME)
+		VALUES(BBS_SEQ.NEXTVAL, #{title}, #{contents}, 0, #{sessionId},SYSDATE, SYSDATE)
+	</insert>
+	
+	<insert id="insertBoardFile" parameterType="hashmap">
+		INSERT INTO BOARD_FILE 
+    	VALUES (FILE_SEQ.NEXTVAL, #{bbsNum}, #{path}, #{filename}, #{originFilename}, #{size}, #{extName})
+	</insert>
+	
+	<delete id="deleteBbs" parameterType="hashmap" >
+		DELETE FROM TBL_BBS
+		WHERE BBS_NUM = #{bbsNum}
+	</delete>
+	
+
+	<update id="updateCnt" parameterType="hashmap">
+		UPDATE TBL_BBS
+		SET
+			HIT = HIT + 1
+		WHERE BBS_NUM = #{bbsNum}
+	</update>
+	
+	<update id="updateBbs" parameterType="hashmap">
+		UPDATE TBL_BBS
+		SET
+			TITLE = #{title},
+			CONTENTS = #{contents}
+		WHERE BBS_NUM = #{bbsNum}
+	</update>
+	
+	<select id="selectFile" parameterType="hashmap" resultType="com.example.test1.model.File">
+		SELECT F.*
+		FROM BOARD_FILE F
+		LEFT JOIN TBL_BBS B ON B.BBS_NUM = F.BOARDNO
+		WHERE F.BOARDNO = #{bbsNum}
+	</select>
+	
+	<select id="selectBbs" parameterType="hashmap" resultType="com.example.test1.model.Bbs">
+		SELECT *
+		FROM TBL_BBS
+		WHERE BBS_NUM = #{bbsNum}
+	</select>
+</mapper>
