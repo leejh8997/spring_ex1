@@ -102,7 +102,7 @@
 						return;
 					}
 					if(self.phoneNum.length != 11){
-						alert("비밀번호는 11자리입니다. ex)01012345678");
+						alert("전화번호는 11자리입니다. ex)01012345678");
 						return;
 					}
 					let nparmap = {

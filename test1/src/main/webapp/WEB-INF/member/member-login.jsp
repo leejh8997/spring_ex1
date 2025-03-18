@@ -51,7 +51,7 @@
 					success : function(data) { 
 						self.member = data.member;
 						console.log(self.member);
-						if(data.result == "success"){
+						if(data.result=="success"){
 							alert(data.member.userName + "님 환영합니다!");
 							pageChange("/board/list.do",{sessionId : self.sessionId , sessionStatus: self.sessionStatus});
 						}else{

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.test1.mapper.MemberMapper;
@@ -19,21 +20,37 @@ public class MemberService {
 	@Autowired
 	HttpSession session;
 	
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	
 	public HashMap<String, Object> memberLogin(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		try {
+			System.out.println(map);
 			Member member = memberMapper.getMember(map);
-			session.setAttribute("sessionId", member.getUserId());
-			session.setAttribute("sessionStatus", member.getStatus());
-			session.setAttribute("sessionName", member.getUserName());
-			session.setAttribute("sessionPhone", member.getPhone());
-			session.setMaxInactiveInterval(60*60);//60*60초
+			System.out.println(member.getPassword());
+			System.out.println("map.get('pwd')");
+			boolean loginFlg = false;
+			if(member != null) {
+				loginFlg = passwordEncoder.matches("map.get('pwd')", member.getPassword());
+			}
+			
+			System.out.println(loginFlg);
+			
+			if(member != null && loginFlg) {
+				session.setAttribute("sessionId", member.getUserId());
+				session.setAttribute("sessionStatus", member.getStatus());
+				session.setAttribute("sessionName", member.getUserName());
+				session.setAttribute("sessionPhone", member.getPhone());
+				session.setMaxInactiveInterval(60*60);//60*60초
+				resultMap.put("result", "success");
+			}
 //			session.invalidate();// 세션 정보 삭제
 //			session.removeAttribute("sessionId");//1개씩삭제할때
-			String result = "success";
+
 			resultMap.put("member", member);
-			resultMap.put("result", result);
+			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			resultMap.put("result", "fail");
@@ -53,6 +70,10 @@ public class MemberService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		try {
+			System.out.println(map);
+			String hashPwd = passwordEncoder.encode("map.get('pwd')");
+			map.put("pwd",hashPwd);
+			System.out.println(map);
 			memberMapper.memberJoin(map);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
