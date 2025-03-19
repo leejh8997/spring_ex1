@@ -22,6 +22,11 @@
 		<button @click="fnLogin">로그인</button>
 		<button @click="fnSearchPwd">비밀번호 찾기</button>
 		<button @click="fnJoin">회원가입</button>
+		<div>
+			<a :href="location">
+				<img src="../img/kakao.png">
+			</a>
+		</div>
 	</div>
 </body>
 </html>
@@ -34,6 +39,7 @@
 				member : [],
 				sessionId: "${sessionId}",
 				sessionStatus: "${sessionStatus}",
+				location : "${location}",
             };
         },
         methods: {

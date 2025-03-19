@@ -7,11 +7,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.7.1.js"
             integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.min.js"></script>
         <script src="/js/page-Change.js"></script>
         <link rel="stylesheet" href="../css/product-style.css">
         <title>쇼핑몰 헤더</title>
-        
+
     </head>
 
     <body>
@@ -32,7 +32,7 @@
                         </a>
                     </div>
                 </section>
-                
+
             </main>
         </div>
     </body>
@@ -44,14 +44,14 @@
                 return {
                     list: [],
                     sessionId: "${sessionId}",
-					sessionStatus: "${sessionStatus}",
-                    
+                    sessionStatus: "${sessionStatus}",
+                    code: "",
                 };
             },
             methods: {
                 fnProductList(keyword) {
                     var self = this;
-                    
+
                     var nparmap = {
                         keyword: keyword
                     };
@@ -68,19 +68,42 @@
                         }
                     });
                 },
-                fnPageChange(itemNo){
-                    pageChange("/product/view.do",{itemNo: itemNo});
+                fnPageChange(itemNo) {
+                    pageChange("/product/view.do", { itemNo: itemNo });
                 },
-                fnProductAdd(){
-                    location.href="/product/add.do";
+                fnProductAdd() {
+                    location.href = "/product/add.do";
+                },
+                fnKakao() {
+                    var self = this;
+                    var nparmap = {
+                        code: self.code
+                    };
+                    $.ajax({
+                        url: "/kakao.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: nparmap,
+                        success: function (data) {
+                            console.log(data);
+
+                        }
+                    });
                 }
             },
             mounted() {
                 var self = this;
-                self.fnProductList();
                 emitter.on('call-main-function', (data) => {
                     self.fnProductList(data.keyword);
                 });
+                const queryParams = new URLSearchParams(window.location.search);
+                self.code = queryParams.get('code') || '';
+                console.log(self.code);
+                if(self.code != ""){
+                    self.fnKakao();
+                }
+                
+                self.fnProductList();
             }
         });
         app.mount('#app');
